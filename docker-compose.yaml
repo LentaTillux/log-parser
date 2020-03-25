@@ -1,0 +1,31 @@
+version: "3"
+services:
+  ulimits:
+    nproc: 65535
+    nofile:
+      soft: 262144
+      hard: 262144
+  client:
+    image: yandex/clickhouse-client
+    container_name: TZ1-clickhouse-client
+    command: ['--host', 'server']
+  server:
+    image: yandex/clickhouse-server
+    container_name: TZ1-clickhouse-server
+    ports:
+      - "8193:8123"
+      - "9090:9000"
+      - "9099:9009"
+
+  php:
+    build: .
+    container_name: TZ1-php
+    ports:
+      - 8090:80
+    entrypoint: bash -c "echo -e \"`/sbin/ip route|awk '/default/ { print $$3 }'`\thost.docker.internal\" | tee -a /etc/hosts > /dev/null && /usr/local/bin/docker-php-entrypoint -k start"
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./:/var/www
+    depends_on:
+      - client
+      - server
