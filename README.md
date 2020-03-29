@@ -51,6 +51,3 @@ efault.wikistat3 FORMAT CSV" < ./data/info.csv
 ```code
 select * from default.wikistat;
 ```
-
-## some images
-![image](./images/WX20181031-212927@2x.png)
