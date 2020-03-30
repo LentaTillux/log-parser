@@ -31,7 +31,7 @@ services:
       - 8090:80
     entrypoint: bash -c "echo -e \"`/sbin/ip route|awk '/default/ { print $$3 }'`\thost.docker.internal\" | tee -a /etc/hosts > /dev/null && /usr/local/bin/docker-php-entrypoint -k start"
     volumes:
-      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
       - ./:/var/www
     depends_on:
       - client

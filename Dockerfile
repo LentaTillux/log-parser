@@ -1,5 +1,5 @@
-FROM php:7.1-fpm-jessie
-LABEL maintainer="Solov <solov@aizn.ru>"
+FROM php:7.2-fpm-jessie
+LABEL maintainer="Solov"
 
 RUN apt-get update \
     && apt-get install -y \
