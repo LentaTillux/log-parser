@@ -2,7 +2,15 @@
 
 declare(strict_types=1);
 
-class ParsingLogFile
+namespace Solov\Parser;
+
+require "UtilsPHP.php";
+require "ParsingInterface.php";
+
+use Solov\Parser\UtilsPHP;
+use Solov\Parser\ParsingInterface;
+
+class ParsingLogFile //implements ParsingInterface
 {
     private $file;
 
@@ -11,46 +19,22 @@ class ParsingLogFile
         $this->file = $file;
     }
 
-    public function parse()
+    public function parse(): array
     {
-        //$text=file_get_contents('access.log');
-        //$pattern='#^(\S+) (\S+) (\S+) \[([\w:\/]+\s[+\-]\d{4})\] "(\S+)\s?(\S+)?\s?(\S+)?" (\d{3}|-) (\d+|-)\s?"?([^"]*)"?\s?"?([^"]*)?"?$#i';
-        //$pattern='#(^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)\s?(\S+)?\s?(\S+)?" (\d{3}|-) (\d+|-)\s?"?([^"]*)"?\s?"?([^"]*)?"?$)#i';
-        $pattern = '#(^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)\s?(\S+)?\s?(\S+)?" (\d{3}|-) (\d+|-)\s?"?([^"]*)"?\s?"?([^"]*)?")#i';
+        $matches = [];
         $file = $this->file;
+        $pattern = '#(^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)\s?(\S+)?\s?(\S+)?" (\d{3}|-) (\d+|-)\s?"?([^"]*)"?\s?"?([^"]*)?")#i';
 
         if (file_exists($file)) {
-            $matches = [];
             $file = fopen($file, "r");
             while (!feof($file)) {
                 $line = fgets($file, 4096);
-                \UtilsPHP::preg_match_all($pattern, $line, $matches[]);
+                //var_dump($line);
+                UtilsPHP::pregMatchAll($pattern, $line, $matches);
             }
             fclose($file);
-            print_r($matches);
         }
+        //print_r($matches);
+        return $matches;
     }
 }
-
-/*$ip=array_count_values($matches[1]);
-$adr=array_count_values($matches[3]);
-
-arsort($ip);
-arsort($adr);
-
-$ip_10=array_slice($ip,0,10);
-$adr_10=array_slice($adr,0,10);
-
-echo "10 самых активных пользователей по ip адресу";
-echo "IP Количество\n";
-foreach($ip_10 as $key=>$value)
-{
-    echo $key.' '.$value;
-}
-
-echo "10 самых посещаемых страниц\n";
-echo "Страница Количество\n";
-foreach($adr_10 as $key=>$value)
-{
-    echo $key.' '.$value;
-}/** */
