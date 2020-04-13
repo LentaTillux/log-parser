@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Solov\Parser;
 
-require "UtilsPHP.php";
-require "ParsingInterface.php";
-
 use Solov\Parser\UtilsPHP;
 use Solov\Parser\ParsingInterface;
 
